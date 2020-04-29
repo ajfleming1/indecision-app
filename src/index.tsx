@@ -11,7 +11,7 @@ const app = {
 const onFormSubmit = (e: any) => {
     e.preventDefault();
     const option = e.target.elements.option.value;
-    if(option) {
+    if (option) {
         app.options.push(option);
         e.target.elements.option.value = "";
         renderApp();
@@ -32,16 +32,17 @@ const renderApp = () => {
             <p>{app.options.length}</p>
             <button onClick={removeAllOptions}>Remove All</button>
             <ol>
-                <li>Item one</li>
-                <li>Item two</li>
+                {
+                    app.options.map(_ => <li key={_}>{_}</li>)
+                }
             </ol>
             <form onSubmit={onFormSubmit}>
-                <input type="text" name="option"/>
+                <input type="text" name="option" />
                 <button>Add Option</button>
             </form>
         </div>
     );
-    
+
     ReactDOM.render(template, appRoot);
 };
 
