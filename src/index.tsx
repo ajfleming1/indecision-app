@@ -1,30 +1,48 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { Hello } from "./components/Hello";
+const appRoot = document.getElementById("example");
+const app = {
+    title: "Indecision App",
+    subtitle: "Put your life in the hands of a computer",
+    options: [] as string[]
+};
 
-let count:number = 0;
+const onFormSubmit = (e: any) => {
+    e.preventDefault();
+    const option = e.target.elements.option.value;
+    if(option) {
+        app.options.push(option);
+        e.target.elements.option.value = "";
+        renderApp();
+    }
+};
 
-const updateCount = (i: number) => {
-    console.log(`Adding ${i} to count.`);
-    count += i;
+const removeAllOptions = () => {
+    app.options = [];
     renderApp();
 };
 
 const renderApp = () => {
-    const templateTwo = (
+    const template = (
         <div>
-            <h1>Count: {count}</h1>
-            <button onClick={() => updateCount(1)}>+1</button>
-            <button onClick={() => updateCount(-1)}>-1</button>
-            <button onClick={() => updateCount(count * -1)}>Reset</button>
+            <h1>{app.title}</h1>
+            {app.subtitle && <p>{app.subtitle}</p>}
+            <p>{app.options.length > 0 ? 'Here are your options' : 'No options'}</p>
+            <p>{app.options.length}</p>
+            <button onClick={removeAllOptions}>Remove All</button>
+            <ol>
+                <li>Item one</li>
+                <li>Item two</li>
+            </ol>
+            <form onSubmit={onFormSubmit}>
+                <input type="text" name="option"/>
+                <button>Add Option</button>
+            </form>
         </div>
     );
-
-    ReactDOM.render(
-        templateTwo,
-        document.getElementById("example")
-    );
-}
+    
+    ReactDOM.render(template, appRoot);
+};
 
 renderApp();
