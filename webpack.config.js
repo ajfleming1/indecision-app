@@ -1,12 +1,12 @@
 const path = require("path");
 module.exports = {
-    entry: './src/playground/es6-classes.tsx',
+    entry: './src/index.tsx',
     output: {
       filename: 'main.js',
       path: path.resolve(__dirname, 'dist'),
     },
 
-    mode: "production",
+    mode: "development",
 
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
