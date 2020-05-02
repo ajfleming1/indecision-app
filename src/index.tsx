@@ -27,10 +27,14 @@ class Header extends React.Component<{ title: string, subtitle: string }> {
 }
 
 class Action extends React.Component {
+    handleClick = () => {
+        alert("Action Button Clicked.")
+    }
+
     render() {
         return (
             <div>
-                <button>
+                <button onClick={this.handleClick}>
                     What should I do?
                 </button>
             </div>
@@ -39,9 +43,15 @@ class Action extends React.Component {
 }
 
 class Options extends React.Component<{ options: string[] }> {
+    handleRemoveAll = () => {
+        console.log(this.props.options);
+        alert("Remove All Button Clicked.");
+    }
+
     render() {
         return (
             <div>
+                <button onClick={this.handleRemoveAll}>Remove All</button>
                 {
                     this.props.options.map(o => <DecisionOption key={o} optionText={o} />)
                 }
@@ -51,9 +61,20 @@ class Options extends React.Component<{ options: string[] }> {
 }
 
 class AddOption extends React.Component {
+    onFormSubmit = (e: any) => {
+        e.preventDefault();
+        const option = e.target.elements.option.value.trim();
+        if (option) {
+            alert(option);
+        }
+    }
+
     render() {
         return (
-            <p>Add Option Goes Here.</p>
+            <form onSubmit={this.onFormSubmit}>
+                <input type="text" name="option" />
+                <button>Add Option</button>
+            </form>
         );
     }
 }
