@@ -1,27 +1,27 @@
-class Counter extends React.Component {
-    handleAddOne = () => {
-        console.log("handleAddOne clicked.");
-    };
+const initialState = {count: 0};
+type State = Readonly<typeof initialState>;
 
-    handleMinusOne = () => {
-        console.log("handleMinusOneClicked");
-    };
-
-    handleReset = () => {
-        console.log("handleRest Clicked");
-    };
-
+class Counter extends React.Component<object, State> {
+    readonly state: State = initialState;
     render() {
         return (
             <div>
-                <h1>Count: </h1>
+                <h1>Count: {this.state.count}</h1>
                 <button onClick={this.handleAddOne}>+1</button>
                 <button onClick={this.handleMinusOne}>-1</button>
                 <button onClick={this.handleReset}>Reset</button>
             </div>
         );
     }
+
+    handleAddOne = () => this.setState(incrementCount);
+    handleMinusOne = () => this.setState(decrementCount);
+    handleReset = () => this.setState(resetCount);
 }
+
+const incrementCount = (prevState: State) => ({ count: prevState.count + 1});
+const decrementCount = (prevState: State) => ({ count: prevState.count - 1});
+const resetCount = () => ({ count: 0});
 
 ReactDOM.render(<Counter />, document.getElementById("appRoot"));
 

@@ -52,5 +52,5 @@ module.exports = {
         port: 9000
     },
     
-    watch: true
+    watch: false
 };
