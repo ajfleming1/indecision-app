@@ -13,7 +13,7 @@ type IProps = {
 
 type State = Readonly<typeof initialState>;
 const deleteOptions = () => ({ options: [] as string[] });
-const appOption = (prevState: State, option: string) => {
+const addOption = (prevState: State, option: string) => {
     return {
         options: prevState.options.concat(option)
     }
@@ -54,7 +54,7 @@ class IndecisionApp extends React.Component<object, State> {
             return "Enter a unique option";
         }
 
-        this.setState(prevState => appOption(prevState, option));
+        this.setState(prevState => addOption(prevState, option));
     }
 }
 
