@@ -1,11 +1,12 @@
 const initialState = {
     title: "Indecision App",
     subtitle: "Put your life in the hands of a computer",
-    options: ["Item One", "Item Two", "Item Three"]
+    options: [] as string[]
 }
 
 type IProps = {
-    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
+    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void,
+    addOption?: (option: string) => void,
     options?: string[],
     hasOptions?: boolean
 }
@@ -20,14 +21,16 @@ class IndecisionApp extends React.Component<object, State> {
         return (
             <div>
                 <Header title={title} subtitle={subtitle} />
-                <Action 
-                    hasOptions={options.length > 0} 
+                <Action
+                    hasOptions={options.length > 0}
                     onClick={this.handlePickOption}
                 />
                 <Options
                     onClick={this.handleDeleteOptions}
                     options={options} />
-                <AddOption />
+                <AddOption
+                    addOption={this.handleAddOption}
+                />
             </div>
         );
     }
@@ -37,6 +40,20 @@ class IndecisionApp extends React.Component<object, State> {
         const randomNum = Math.floor(this.state.options.length * Math.random());
         const option = this.state.options[randomNum];
         alert(option);
+    }
+
+    handleAddOption = (option: string) => {
+        if (!option) {
+            return "Enter a valid option";
+        } else if (this.state.options.indexOf(option) > -1) {
+            return "Enter a unique option";
+        }
+
+        this.setState((prevState: State) => {
+            return {
+                options: prevState.options.concat(option)
+            }
+        });
     }
 }
 
@@ -80,21 +97,30 @@ class Options extends React.Component<IProps> {
     }
 }
 
-class AddOption extends React.Component {
+class AddOption extends React.Component<IProps> {
+    state = {
+        error: undefined as string
+    };
+
     onFormSubmit = (e: any) => {
         e.preventDefault();
         const option = e.target.elements.option.value.trim();
-        if (option) {
-            alert(option);
-        }
+        const error = this.props.addOption(option);
+
+        this.setState(() => (
+            { error }
+        ));
     }
 
     render() {
         return (
-            <form onSubmit={this.onFormSubmit}>
-                <input type="text" name="option" />
-                <button>Add Option</button>
-            </form>
+            <div>
+                {this.state.error && <p>{this.state.error}</p>}
+                <form onSubmit={this.onFormSubmit}>
+                    <input type="text" name="option" />
+                    <button>Add Option</button>
+                </form>
+            </div>
         );
     }
 }
