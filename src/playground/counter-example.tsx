@@ -1,12 +1,12 @@
-const initialState = {count: 0};
-type State = Readonly<typeof initialState>;
+const counterInitialState = {count: 0};
+type CounterState = Readonly<typeof counterInitialState>;
 
-class Counter extends React.Component<object, State> {
-    readonly state: State = initialState;
+class Counter extends React.Component<object, CounterState> {
+    readonly CounterState: CounterState = counterInitialState;
     render() {
         return (
             <div>
-                <h1>Count: {this.state.count}</h1>
+                <h1>Count: {this.CounterState.count}</h1>
                 <button onClick={this.handleAddOne}>+1</button>
                 <button onClick={this.handleMinusOne}>-1</button>
                 <button onClick={this.handleReset}>Reset</button>
@@ -19,8 +19,8 @@ class Counter extends React.Component<object, State> {
     handleReset = () => this.setState(resetCount);
 }
 
-const incrementCount = (prevState: State) => ({ count: prevState.count + 1});
-const decrementCount = (prevState: State) => ({ count: prevState.count - 1});
+const incrementCount = (prevCounterState: CounterState) => ({ count: prevCounterState.count + 1});
+const decrementCount = (prevCounterState: CounterState) => ({ count: prevCounterState.count - 1});
 const resetCount = () => ({ count: 0});
 
 ReactDOM.render(<Counter />, document.getElementById("appRoot"));

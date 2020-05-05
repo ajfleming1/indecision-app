@@ -1,16 +1,42 @@
-class IndecisionApp extends React.Component {
+const initialState = {
+    title: "Indecision App",
+    subtitle: "Put your life in the hands of a computer",
+    options: ["Item One", "Item Two", "Item Three"]
+}
+
+type IProps = {
+    onClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
+    options?: string[],
+    hasOptions?: boolean
+}
+
+type State = Readonly<typeof initialState>;
+const deleteOptions = () => ({ options: [] as string[] })
+
+class IndecisionApp extends React.Component<object, State> {
+    readonly state: State = initialState;
     render() {
-        const title: string = "Indecision";
-        const subtitle: string = "Put your life in the hands of a computer.";
-        const options: string[] = ["Thing One", "Thing Two", "Thing Four"];
+        const { title, subtitle, options } = this.state;
         return (
             <div>
                 <Header title={title} subtitle={subtitle} />
-                <Action />
-                <Options options={options} />
+                <Action 
+                    hasOptions={options.length > 0} 
+                    onClick={this.handlePickOption}
+                />
+                <Options
+                    onClick={this.handleDeleteOptions}
+                    options={options} />
                 <AddOption />
             </div>
         );
+    }
+
+    handleDeleteOptions = () => this.setState(deleteOptions);
+    handlePickOption = () => {
+        const randomNum = Math.floor(this.state.options.length * Math.random());
+        const option = this.state.options[randomNum];
+        alert(option);
     }
 }
 
@@ -26,15 +52,14 @@ class Header extends React.Component<{ title: string, subtitle: string }> {
     }
 }
 
-class Action extends React.Component {
-    handleClick = () => {
-        alert("Action Button Clicked.")
-    }
-
+class Action extends React.Component<IProps> {
     render() {
         return (
             <div>
-                <button onClick={this.handleClick}>
+                <button
+                    disabled={!this.props.hasOptions}
+                    onClick={this.props.onClick}
+                >
                     What should I do?
                 </button>
             </div>
@@ -42,16 +67,11 @@ class Action extends React.Component {
     }
 }
 
-class Options extends React.Component<{ options: string[] }> {
-    handleRemoveAll = () => {
-        console.log(this.props.options);
-        alert("Remove All Button Clicked.");
-    }
-
+class Options extends React.Component<IProps> {
     render() {
         return (
             <div>
-                <button onClick={this.handleRemoveAll}>Remove All</button>
+                <button onClick={this.props.onClick}>Remove All</button>
                 {
                     this.props.options.map(o => <DecisionOption key={o} optionText={o} />)
                 }
