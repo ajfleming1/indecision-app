@@ -12,7 +12,17 @@ type IProps = {
 }
 
 type State = Readonly<typeof initialState>;
-const deleteOptions = () => ({ options: [] as string[] })
+const deleteOptions = () => ({ options: [] as string[] });
+const appOption = (prevState: State, option: string) => {
+    return {
+        options: prevState.options.concat(option)
+    }
+}
+const pickRandom = (options: string[]) => {
+    const randomNum = Math.floor(options.length * Math.random());
+    const option = options[randomNum];
+    alert(option);
+}
 
 class IndecisionApp extends React.Component<object, State> {
     readonly state: State = initialState;
@@ -36,12 +46,7 @@ class IndecisionApp extends React.Component<object, State> {
     }
 
     handleDeleteOptions = () => this.setState(deleteOptions);
-    handlePickOption = () => {
-        const randomNum = Math.floor(this.state.options.length * Math.random());
-        const option = this.state.options[randomNum];
-        alert(option);
-    }
-
+    handlePickOption = () => pickRandom(this.state.options);
     handleAddOption = (option: string) => {
         if (!option) {
             return "Enter a valid option";
@@ -49,11 +54,7 @@ class IndecisionApp extends React.Component<object, State> {
             return "Enter a unique option";
         }
 
-        this.setState((prevState: State) => {
-            return {
-                options: prevState.options.concat(option)
-            }
-        });
+        this.setState(prevState => appOption(prevState, option));
     }
 }
 
@@ -110,6 +111,8 @@ class AddOption extends React.Component<IProps> {
         this.setState(() => (
             { error }
         ));
+
+        e.target.elements.option.value = "";
     }
 
     render() {
