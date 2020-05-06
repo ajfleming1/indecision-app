@@ -3,18 +3,14 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 const initialState = {
-    count: 0,
-    withStartCount(count: number){
-        this.count = count;
-        return this;
-    }
+    count: 0
 };
 
 type State = Readonly<typeof initialState>;
 
 class Counter extends React.Component<{count: number}, State> {
     static defaultProps: { count: number; };
-    readonly state: State = initialState.withStartCount(this.props.count);
+    readonly state: State =  { count: initialState.count + this.props.count };
     render() {
         return (
             <div>

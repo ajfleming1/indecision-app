@@ -2,10 +2,6 @@ const initialState = {
     title: "Indecision App",
     subtitle: "Put your life in the hands of a computer",
     options: [] as string[],
-    withOptionsFactory(options: string[]) {
-        this.options = options;
-        return this;
-    }
 }
 
 type IProps = {
@@ -30,7 +26,12 @@ const pickRandom = (options: string[]) => {
 
 class IndecisionApp extends React.Component<{options: string[]}, State> {
     static defaultProps: { options: string[]; };
-    readonly state: State = initialState.withOptionsFactory(this.props.options);
+    readonly state: State = {
+        title: initialState.title,
+        subtitle: initialState.subtitle,
+        options: initialState.options.concat(this.props.options)
+    };
+
     render() {
         const { subtitle, options } = this.state;
         return (
