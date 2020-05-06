@@ -1,7 +1,11 @@
 const initialState = {
     title: "Indecision App",
     subtitle: "Put your life in the hands of a computer",
-    options: [] as string[]
+    options: [] as string[],
+    withOptionsFactory(options: string[]) {
+        this.options = options;
+        return this;
+    }
 }
 
 type IProps = {
@@ -24,13 +28,14 @@ const pickRandom = (options: string[]) => {
     alert(option);
 }
 
-class IndecisionApp extends React.Component<object, State> {
-    readonly state: State = initialState;
+class IndecisionApp extends React.Component<{options: string[]}, State> {
+    static defaultProps: { options: string[]; };
+    readonly state: State = initialState.withOptionsFactory(this.props.options);
     render() {
-        const { title, subtitle, options } = this.state;
+        const { subtitle, options } = this.state;
         return (
             <div>
-                <Header title={title} subtitle={subtitle} />
+                <Header subtitle={subtitle} />
                 <Action
                     hasOptions={options.length > 0}
                     onClick={this.handlePickOption}
@@ -58,12 +63,20 @@ class IndecisionApp extends React.Component<object, State> {
     }
 }
 
-const Header = (props: { title: string, subtitle: string }) => (
+IndecisionApp.defaultProps = {
+    options: []
+}
+
+const Header = (props: { title: string, subtitle?: string }) => (
     <div>
         <h1>{props.title}</h1>
-        <h2>{props.subtitle}</h2>
+        {props.subtitle && <h2>{props.subtitle}</h2>}
     </div>
 );
+
+Header.defaultProps = {
+    title: "Indecision"
+}
 
 const Action = (props: IProps) => (
     <div>
