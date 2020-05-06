@@ -5,11 +5,14 @@ import * as ReactDOM from "react-dom";
 const initialState = {
     count: 0
 };
-
+const defaultProps = {
+    count: 0
+};
 type State = Readonly<typeof initialState>;
+type DefaultProps = Readonly<typeof defaultProps>;
+class Counter extends React.Component<DefaultProps, State> {
+    static defaultProps = defaultProps;
 
-class Counter extends React.Component<{count: number}, State> {
-    static defaultProps: { count: number; };
     readonly state: State =  { count: initialState.count + this.props.count };
     render() {
         return (
@@ -30,10 +33,6 @@ class Counter extends React.Component<{count: number}, State> {
 const incrementCount = (prevState: State) => ({ count: prevState.count + 1});
 const decrementCount = (prevState: State) => ({ count: prevState.count - 1});
 const resetCount = () => ({ count: 0});
-
-Counter.defaultProps = {
-    count: 0
-}
 
 ReactDOM.render(<Counter />, document.getElementById("appRoot"));
 

@@ -2,16 +2,20 @@ const initialState = {
     title: "Indecision App",
     subtitle: "Put your life in the hands of a computer",
     options: [] as string[],
-}
+} 
 
+const defaultProps = {
+    options: [] as string[]
+};
+
+type State = Readonly<typeof initialState>;
+type DefaultProps = Readonly<typeof defaultProps>;
 type IProps = {
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void,
     addOption?: (option: string) => void,
-    options?: string[],
     hasOptions?: boolean
-}
+} & Partial<DefaultProps>
 
-type State = Readonly<typeof initialState>;
 const deleteOptions = () => ({ options: [] as string[] });
 const addOption = (prevState: State, option: string) => {
     return {
@@ -24,12 +28,13 @@ const pickRandom = (options: string[]) => {
     alert(option);
 }
 
-class IndecisionApp extends React.Component<{options: string[]}, State> {
-    static defaultProps: { options: string[]; };
+class IndecisionApp extends React.Component<DefaultProps, State> {
+    static defaultProps = defaultProps;
+
     readonly state: State = {
         title: initialState.title,
         subtitle: initialState.subtitle,
-        options: initialState.options.concat(this.props.options)
+        options: this.props.options
     };
 
     render() {
@@ -62,10 +67,6 @@ class IndecisionApp extends React.Component<{options: string[]}, State> {
 
         this.setState(prevState => addOption(prevState, option));
     }
-}
-
-IndecisionApp.defaultProps = {
-    options: []
 }
 
 const Header = (props: { title: string, subtitle?: string }) => (
@@ -140,4 +141,4 @@ const DecisionOption = (props: { optionText: string }) => (
 //     </div>
 // );
 
-ReactDOM.render(<IndecisionApp />, document.getElementById("appRoot"));
+ReactDOM.render(<IndecisionApp options={["123"]} />, document.getElementById("appRoot"));
