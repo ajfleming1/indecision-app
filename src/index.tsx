@@ -58,45 +58,32 @@ class IndecisionApp extends React.Component<object, State> {
     }
 }
 
-class Header extends React.Component<{ title: string, subtitle: string }> {
-    title: string;
-    render() {
-        return (
-            <div>
-                <h1>{this.props.title}</h1>
-                <h2>{this.props.subtitle}</h2>
-            </div>
-        );
-    }
-}
+const Header = (props: { title: string, subtitle: string }) => (
+    <div>
+        <h1>{props.title}</h1>
+        <h2>{props.subtitle}</h2>
+    </div>
+);
 
-class Action extends React.Component<IProps> {
-    render() {
-        return (
-            <div>
-                <button
-                    disabled={!this.props.hasOptions}
-                    onClick={this.props.onClick}
-                >
-                    What should I do?
-                </button>
-            </div>
-        );
-    }
-}
+const Action = (props: IProps) => (
+    <div>
+        <button
+            disabled={!props.hasOptions}
+            onClick={props.onClick}
+        >
+            What should I do?
+        </button>
+    </div>
+);
 
-class Options extends React.Component<IProps> {
-    render() {
-        return (
-            <div>
-                <button onClick={this.props.onClick}>Remove All</button>
-                {
-                    this.props.options.map(o => <DecisionOption key={o} optionText={o} />)
-                }
-            </div>
-        );
-    }
-}
+const Options = (props: IProps) => (
+    <div>
+        <button onClick={props.onClick}>Remove All</button>
+        {
+            props.options.map(o => <DecisionOption key={o} optionText={o} />)
+        }
+    </div>
+);
 
 class AddOption extends React.Component<IProps> {
     state = {
@@ -128,12 +115,15 @@ class AddOption extends React.Component<IProps> {
     }
 }
 
-class DecisionOption extends React.Component<{ optionText: string }> {
-    render() {
-        return (
-            <p>{this.props.optionText}</p>
-        );
-    }
-}
+const DecisionOption = (props: { optionText: string }) => (
+    <p>{props.optionText}</p>
+);
+
+// const User = (props: { name: string, age: number }) => (
+//     <div>
+//         <p>Name: {props.name}</p>
+//         <p>Age: {props.age}</p>
+//     </div>
+// );
 
 ReactDOM.render(<IndecisionApp />, document.getElementById("appRoot"));
