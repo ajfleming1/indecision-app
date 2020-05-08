@@ -2,7 +2,7 @@ const initialState = {
     title: "Indecision App",
     subtitle: "Put your life in the hands of a computer",
     options: [] as string[],
-} 
+}
 
 const defaultProps = {
     options: [] as string[]
@@ -11,22 +11,28 @@ const defaultProps = {
 type State = Readonly<typeof initialState>;
 type DefaultProps = Readonly<typeof defaultProps>;
 type IProps = {
-    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void,
-    addOption?: (option: string) => void,
+    buttonHandler?: (event: React.MouseEvent<HTMLButtonElement>) => void,
+    optionHandler?: (option: string) => void,
     hasOptions?: boolean
 } & Partial<DefaultProps>
 
-const deleteOptions = () => ({ options: [] as string[] });
-const addOption = (prevState: State, option: string) => {
-    return {
-        options: prevState.options.concat(option)
-    }
-}
+const removeAllOptions = () => ({ 
+    options: [] as string[] 
+});
+
+const removeOption = (prevState: State, option: string) => ({
+    options: prevState.options.filter(o => o !== option)
+});
+
+const addOption = (prevState: State, option: string) => ({
+    options: prevState.options.concat(option)
+});
+
 const pickRandom = (options: string[]) => {
     const randomNum = Math.floor(options.length * Math.random());
     const option = options[randomNum];
     alert(option);
-}
+};
 
 class IndecisionApp extends React.Component<DefaultProps, State> {
     static defaultProps = defaultProps;
@@ -44,25 +50,27 @@ class IndecisionApp extends React.Component<DefaultProps, State> {
                 <Header subtitle={subtitle} />
                 <Action
                     hasOptions={options.length > 0}
-                    onClick={this.handlePickOption}
+                    buttonHandler={this.handlePickOption}
                 />
                 <Options
-                    onClick={this.handleDeleteOptions}
+                    buttonHandler={this.handleDeleteOptions}
+                    optionHandler={this.handleDeleteOption}
                     options={options} />
                 <AddOption
-                    addOption={this.handleAddOption}
+                    optionHandler={this.handleAddOption}
                 />
             </div>
         );
     }
 
-    handleDeleteOptions = () => this.setState(deleteOptions);
+    handleDeleteOptions = () => this.setState(removeAllOptions);
+    handleDeleteOption = (option: string) => { this.setState(prevState => removeOption(prevState, option)); }
     handlePickOption = () => pickRandom(this.state.options);
     handleAddOption = (option: string) => {
         if (!option) {
-            return "Enter a valid option";
+            return "Enter a valid option.";
         } else if (this.state.options.indexOf(option) > -1) {
-            return "Enter a unique option";
+            return "Enter a unique option.";
         }
 
         this.setState(prevState => addOption(prevState, option));
@@ -84,7 +92,7 @@ const Action = (props: IProps) => (
     <div>
         <button
             disabled={!props.hasOptions}
-            onClick={props.onClick}
+            onClick={props.buttonHandler}
         >
             What should I do?
         </button>
@@ -93,9 +101,14 @@ const Action = (props: IProps) => (
 
 const Options = (props: IProps) => (
     <div>
-        <button onClick={props.onClick}>Remove All</button>
+        <button onClick={props.buttonHandler}>Remove All</button>
         {
-            props.options.map(o => <DecisionOption key={o} optionText={o} />)
+            props.options.map(o =>
+                <DecisionOption
+                    key={o}
+                    deleteOption={props.optionHandler}
+                    optionText={o}
+                />)
         }
     </div>
 );
@@ -108,12 +121,8 @@ class AddOption extends React.Component<IProps> {
     onFormSubmit = (e: any) => {
         e.preventDefault();
         const option = e.target.elements.option.value.trim();
-        const error = this.props.addOption(option);
-
-        this.setState(() => (
-            { error }
-        ));
-
+        const error = this.props.optionHandler(option);
+        this.setState(() => ({ error }));
         e.target.elements.option.value = "";
     }
 
@@ -130,8 +139,14 @@ class AddOption extends React.Component<IProps> {
     }
 }
 
-const DecisionOption = (props: { optionText: string }) => (
-    <p>{props.optionText}</p>
+const DecisionOption = (props: { optionText: string, deleteOption: (option: string) => void }) => (
+    <div>
+        {props.optionText}
+        <button 
+        onClick={(e) => props.deleteOption(props.optionText)}>
+            Remove Option
+        </button>
+    </div>
 );
 
 // const User = (props: { name: string, age: number }) => (
@@ -141,4 +156,4 @@ const DecisionOption = (props: { optionText: string }) => (
 //     </div>
 // );
 
-ReactDOM.render(<IndecisionApp options={["123"]} />, document.getElementById("appRoot"));
+ReactDOM.render(<IndecisionApp />, document.getElementById("appRoot"));
