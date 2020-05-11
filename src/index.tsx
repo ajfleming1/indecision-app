@@ -12,12 +12,12 @@ type State = Readonly<typeof initialState>;
 type DefaultProps = Readonly<typeof defaultProps>;
 type IProps = {
     buttonHandler?: (event: React.MouseEvent<HTMLButtonElement>) => void,
-    optionHandler?: (option: string) => void,
+    optionHandler?: (option: string) => void | string,
     hasOptions?: boolean
 } & Partial<DefaultProps>
 
-const removeAllOptions = () => ({ 
-    options: [] as string[] 
+const removeAllOptions = () => ({
+    options: [] as string[]
 });
 
 const removeOption = (prevState: State, option: string) => ({
@@ -75,6 +75,28 @@ class IndecisionApp extends React.Component<DefaultProps, State> {
 
         this.setState(prevState => addOption(prevState, option));
     }
+
+    componentDidMount() {
+        try {
+            const json = localStorage.getItem("options");
+            const options = JSON.parse(json);
+            if (options) {
+                this.setState(() => ({ options }));
+            }
+            
+        } catch(e) {;}
+    }
+
+    componentDidUpdate(prevProps: DefaultProps, prevState: State) {
+        if (this.state.options.length !== prevState.options.length) {
+            const json = JSON.stringify(this.state.options);
+            localStorage.setItem("options", json);
+        }
+    }
+
+    componentWillUnmount() {
+        console.log("componentWillUnmount");
+    }
 }
 
 const Header = (props: { title: string, subtitle?: string }) => (
@@ -101,6 +123,7 @@ const Action = (props: IProps) => (
 
 const Options = (props: IProps) => (
     <div>
+        {props.options.length === 0 && <p>Please Add an Option to Get Started.</p>}
         <button onClick={props.buttonHandler}>Remove All</button>
         {
             props.options.map(o =>
@@ -123,7 +146,10 @@ class AddOption extends React.Component<IProps> {
         const option = e.target.elements.option.value.trim();
         const error = this.props.optionHandler(option);
         this.setState(() => ({ error }));
-        e.target.elements.option.value = "";
+        console.log(error);
+        if(!error) {
+            e.target.elements.option.value = "";
+        }
     }
 
     render() {
@@ -142,8 +168,8 @@ class AddOption extends React.Component<IProps> {
 const DecisionOption = (props: { optionText: string, deleteOption: (option: string) => void }) => (
     <div>
         {props.optionText}
-        <button 
-        onClick={(e) => props.deleteOption(props.optionText)}>
+        <button
+            onClick={(e) => props.deleteOption(props.optionText)}>
             Remove Option
         </button>
     </div>
