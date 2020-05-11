@@ -1,19 +1,14 @@
-export {};
+export { };
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 const initialState = {
     count: 0
 };
-const defaultProps = {
-    count: 0
-};
-type State = Readonly<typeof initialState>;
-type DefaultProps = Readonly<typeof defaultProps>;
-class Counter extends React.Component<DefaultProps, State> {
-    static defaultProps = defaultProps;
 
-    readonly state: State =  { count: initialState.count + this.props.count };
+type State = Readonly<typeof initialState>;
+class Counter extends React.Component<object, State> {
+    readonly state: State = initialState;
     render() {
         return (
             <div>
@@ -28,11 +23,28 @@ class Counter extends React.Component<DefaultProps, State> {
     handleAddOne = () => this.setState(incrementCount);
     handleMinusOne = () => this.setState(decrementCount);
     handleReset = () => this.setState(resetCount);
+
+    componentDidMount() {
+        try {
+            const countStr = localStorage.getItem("count");
+            const count = parseInt(countStr, 10);
+            if (!isNaN(count)) {
+                this.setState(() => ({ count }));
+            }
+
+        } catch (e) { ; }
+    }
+
+    componentDidUpdate(prevProps: DefaultProps, prevState: State) {
+        if (prevState.count !== this.state.count) {
+            localStorage.setItem("count", this.state.count.toString());
+        }
+    }
 }
 
-const incrementCount = (prevState: State) => ({ count: prevState.count + 1});
-const decrementCount = (prevState: State) => ({ count: prevState.count - 1});
-const resetCount = () => ({ count: 0});
+const incrementCount = (prevState: State) => ({ count: prevState.count + 1 });
+const decrementCount = (prevState: State) => ({ count: prevState.count - 1 });
+const resetCount = () => ({ count: 0 });
 
 ReactDOM.render(<Counter />, document.getElementById("appRoot"));
 

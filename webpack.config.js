@@ -1,6 +1,6 @@
 const path = require("path");
 module.exports = {
-    entry: './src/index.tsx',
+    entry: './src/playground/counter-example.tsx',
     output: {
       filename: 'main.js',
       path: path.resolve(__dirname, 'dist'),
