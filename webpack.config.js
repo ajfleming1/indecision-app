@@ -1,6 +1,6 @@
 const path = require("path");
 module.exports = {
-    entry: './src/playground/app.ts',
+    entry: './src/playground/app.tsx',
     output: {
       filename: 'main.js',
       path: path.resolve(__dirname, 'dist'),
