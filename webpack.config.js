@@ -1,4 +1,6 @@
 const path = require("path");
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+
 module.exports = {
     entry: './src/playground/app.tsx',
     output: {
@@ -36,6 +38,10 @@ module.exports = {
             }
         ]
     },
+
+    plugins: [
+        new HtmlWebPackPlugin({template: "./src/index.html", filename: "./index.html" })
+    ],
 
     // When importing a module whose path matches one of the following, just
     // assume a corresponding global variable exists and use that instead.
