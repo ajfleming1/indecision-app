@@ -1,18 +1,9 @@
-import subtract, {square, add} from "./utils";
-import isSenior, {canDrink, isAdult} from "./person";
+import validator from "validator";
+import React from "react";
+import ReactDom from "react-dom";
 
-console.log("App is running.");
+const template = React.createElement('p', {}, 'Testing 123');
 
-console.log(`square(2) - ${square(2)}`);
+console.log(validator.isEmail('test@gmail.com'));
 
-console.log(`add(100, 23) - ${add(100, 23)}`);
-
-console.log(`isAdult(18) - ${isAdult(18)}`);
-
-console.log(`canDrink(20) - ${canDrink(20)}`);
-
-console.log(`subtract(100, 20) - ${subtract(100, 20)}`);
-
-console.log(`isSenior(65) - ${isSenior(65)}`);
-
-console.log(`isSenior(64) - ${isSenior(64)}`);
+ReactDom.render(template, document.getElementById("appRoot"));

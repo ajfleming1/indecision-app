@@ -22,7 +22,9 @@
     "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
+    "@types/validator": "^13.0.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "validator": "^13.0.0"
   }
 }
