@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FormEvent } from "react";
 import IProps from "../@types/IProps";
 
 export default class AddOption extends React.Component<IProps> {
@@ -6,17 +6,17 @@ export default class AddOption extends React.Component<IProps> {
         error: undefined as string
     };
 
-    onFormSubmit = (e: any) => {
+    onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const option = e.target.elements.option.value.trim();
+        const option = (e.currentTarget.elements[0] as HTMLInputElement).value
         const error = this.props.optionHandler(option);
         this.setState(() => ({ error }));
         if(!error) {
-            e.target.elements.option.value = "";
+            (e.currentTarget.elements[0] as HTMLInputElement).value = "";
         }
     }
 
-    render() {
+    render = () => {
         return (
             <div>
                 {this.state.error && <p>{this.state.error}</p>}

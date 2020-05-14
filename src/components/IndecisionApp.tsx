@@ -32,7 +32,20 @@ class IndecisionApp extends React.Component<DefaultProps, State> {
         options: this.props.options
     };
 
-    render() {
+    handleDeleteOptions = () => this.setState(removeAllOptions);
+    handleDeleteOption = (option: string) => { this.setState(prevState => removeOption(prevState, option)); }
+    handlePickOption = () => pickRandom(this.state.options);
+    handleAddOption = (option: string) => {
+        if (!option) {
+            return "Enter a valid option.";
+        } else if (this.state.options.indexOf(option) > -1) {
+            return "Enter a unique option.";
+        }
+
+        this.setState(prevState => addOption(prevState, option));
+    }
+
+    render = () => {
         const { subtitle, options } = this.state;
         return (
             <div>
@@ -52,20 +65,7 @@ class IndecisionApp extends React.Component<DefaultProps, State> {
         );
     }
 
-    handleDeleteOptions = () => this.setState(removeAllOptions);
-    handleDeleteOption = (option: string) => { this.setState(prevState => removeOption(prevState, option)); }
-    handlePickOption = () => pickRandom(this.state.options);
-    handleAddOption = (option: string) => {
-        if (!option) {
-            return "Enter a valid option.";
-        } else if (this.state.options.indexOf(option) > -1) {
-            return "Enter a unique option.";
-        }
-
-        this.setState(prevState => addOption(prevState, option));
-    }
-
-    componentDidMount() {
+    componentDidMount = () => {
         try {
             const json = localStorage.getItem("options");
             const options = JSON.parse(json);
@@ -76,14 +76,14 @@ class IndecisionApp extends React.Component<DefaultProps, State> {
         } catch(e) {;}
     }
 
-    componentDidUpdate(prevProps: DefaultProps, prevState: State) {
+    componentDidUpdate = (prevProps: DefaultProps, prevState: State) => {
         if (this.state.options.length !== prevState.options.length) {
             const json = JSON.stringify(this.state.options);
             localStorage.setItem("options", json);
         }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount = () => {
         console.log("componentWillUnmount");
     }
 }
