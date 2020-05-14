@@ -4,6 +4,7 @@ import Action from "./Action";
 import Options from "./Options";
 import AddOption from "./AddOption";
 import React from "react";
+import OptionModal from "./OptionModal";
 
 const removeAllOptions = () => ({
     options: [] as string[]
@@ -20,8 +21,14 @@ const addOption = (prevState: State, option: string) => ({
 const pickRandom = (options: string[]) => {
     const randomNum = Math.floor(options.length * Math.random());
     const option = options[randomNum];
-    alert(option);
+    return({
+        selectedOption: option
+    });
 };
+
+const clearSelectedOption = () => ({
+    selectedOption: undefined as string | undefined
+});
 
 class IndecisionApp extends React.Component<DefaultProps, State> {
     static defaultProps = defaultProps;
@@ -29,12 +36,14 @@ class IndecisionApp extends React.Component<DefaultProps, State> {
     readonly state: State = {
         title: initialState.title,
         subtitle: initialState.subtitle,
+        selectedOption: initialState.selectedOption,
         options: this.props.options
     };
 
     handleDeleteOptions = () => this.setState(removeAllOptions);
     handleDeleteOption = (option: string) => { this.setState(prevState => removeOption(prevState, option)); }
-    handlePickOption = () => pickRandom(this.state.options);
+    handlePickOption = () => this.setState(pickRandom(this.state.options));
+    handleCloseModal = () => this.setState(clearSelectedOption);
     handleAddOption = (option: string) => {
         if (!option) {
             return "Enter a valid option.";
@@ -60,6 +69,11 @@ class IndecisionApp extends React.Component<DefaultProps, State> {
                     options={options} />
                 <AddOption
                     optionHandler={this.handleAddOption}
+                />
+
+                <OptionModal
+                    selectedOption={this.state.selectedOption}
+                    closeModal={this.handleCloseModal}
                 />
             </div>
         );

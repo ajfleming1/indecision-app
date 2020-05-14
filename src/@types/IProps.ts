@@ -14,6 +14,7 @@ export const initialState = {
     title: "Indecision App",
     subtitle: "Put your life in the hands of a computer",
     options: [] as string[],
+    selectedOption: "" as string | undefined
 }
 
 export type State = Readonly<typeof initialState>;
