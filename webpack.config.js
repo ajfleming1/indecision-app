@@ -30,6 +30,14 @@ module.exports = {
                     }
                 ]
             },
+            {
+                test: /\.scss$/,
+                use: [
+                    "style-loader",
+                    "css-loader",
+                    "sass-loader"
+                ]
+            },
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             {
                 enforce: "pre",
@@ -57,6 +65,6 @@ module.exports = {
         compress: true,
         port: 9000
     },
-    
+
     watch: false
 };
