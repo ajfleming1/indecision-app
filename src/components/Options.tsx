@@ -4,7 +4,6 @@ import DecisionOption from "./DecisionOption";
 
 const Options = (props: IProps) => (
     <div>
-        {props.options.length === 0 && <p>Please Add an Option to Get Started.</p>}
         <button onClick={props.buttonHandler}>Remove All</button>
         {
             props.options.map(o =>
@@ -14,6 +13,7 @@ const Options = (props: IProps) => (
                     optionText={o}
                 />)
         }
+        {props.options.length === 0 && <p>Please add an option to get started.</p>}
     </div>
 );
 
