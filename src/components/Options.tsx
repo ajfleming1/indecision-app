@@ -4,7 +4,9 @@ import DecisionOption from "./DecisionOption";
 
 const Options = (props: IProps) => (
     <div>
-        <button onClick={props.buttonHandler}>Remove All</button>
+        <button
+         className="button button--link" 
+         onClick={props.buttonHandler}>Remove All</button>
         {
             props.options.map(o =>
                 <DecisionOption

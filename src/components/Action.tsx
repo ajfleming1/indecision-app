@@ -4,6 +4,7 @@ import IProps from "../@types/IProps";
 const Action = (props: IProps) => (
     <div>
         <button
+            className="big-button"
             disabled={!props.hasOptions}
             onClick={props.buttonHandler}
         >

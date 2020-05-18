@@ -4,6 +4,7 @@ const DecisionOption = (props: { optionText: string, deleteOption: (option: stri
     <div>
         {props.optionText}
         <button
+            className="button button--link"
             onClick={(e) => props.deleteOption(props.optionText)}>
             Remove Option
         </button>
