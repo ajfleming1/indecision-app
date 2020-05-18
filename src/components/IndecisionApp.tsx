@@ -21,7 +21,7 @@ const addOption = (prevState: State, option: string) => ({
 const pickRandom = (options: string[]) => {
     const randomNum = Math.floor(options.length * Math.random());
     const option = options[randomNum];
-    return({
+    return ({
         selectedOption: option
     });
 };
@@ -59,22 +59,24 @@ class IndecisionApp extends React.Component<DefaultProps, State> {
         return (
             <div>
                 <Header subtitle={subtitle} />
-                <Action
-                    hasOptions={options.length > 0}
-                    buttonHandler={this.handlePickOption}
-                />
-                <Options
-                    buttonHandler={this.handleDeleteOptions}
-                    optionHandler={this.handleDeleteOption}
-                    options={options} />
-                <AddOption
-                    optionHandler={this.handleAddOption}
-                />
+                <div className="container">
+                    <Action
+                        hasOptions={options.length > 0}
+                        buttonHandler={this.handlePickOption}
+                    />
+                    <Options
+                        buttonHandler={this.handleDeleteOptions}
+                        optionHandler={this.handleDeleteOption}
+                        options={options} />
+                    <AddOption
+                        optionHandler={this.handleAddOption}
+                    />
 
-                <OptionModal
-                    selectedOption={this.state.selectedOption}
-                    closeModal={this.handleCloseModal}
-                />
+                    <OptionModal
+                        selectedOption={this.state.selectedOption}
+                        closeModal={this.handleCloseModal}
+                    />
+                </div>
             </div>
         );
     }
@@ -86,8 +88,8 @@ class IndecisionApp extends React.Component<DefaultProps, State> {
             if (options) {
                 this.setState(() => ({ options }));
             }
-            
-        } catch(e) {;}
+
+        } catch (e) { ; }
     }
 
     componentDidUpdate = (prevProps: DefaultProps, prevState: State) => {
