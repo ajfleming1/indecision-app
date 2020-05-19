@@ -15,10 +15,11 @@ const Options = (props: IProps) => (
 
         {props.options.length === 0 && <p className="widget__message">Please add an option to get started.</p>}
         {
-            props.options.map(o =>
+            props.options.map((o,i) =>
                 <DecisionOption
                     key={o}
                     deleteOption={props.optionHandler}
+                    count={i + 1}
                     optionText={o}
                 />)
         }
