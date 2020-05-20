@@ -8,7 +8,7 @@ module.exports = {
       path: path.resolve(__dirname, 'dist'),
     },
 
-    mode: "development",
+    mode: "production",
 
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
